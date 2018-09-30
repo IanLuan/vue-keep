@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="app" @click="closeMenu">
+    <v-app>
+
+      <v-navigation-drawer
+        v-model= "drawer"
+        fixed
+        clipped
+        hide-overlay = "false"
+        class="grey lighten-4"
+        disable-resize-watcher
+        app
+
+
+      >
+        <v-list
+          dense
+          class="grey lighten-4"
+        >
+          <div v-for="(item, i) in items">
+              <v-layout
+                v-if="item.heading"
+                :key="i"
+                row
+                align-center
+            >
+              <v-flex xs6>
+                <v-subheader>
+                  {{ item.heading }}
+                </v-subheader>
+              </v-flex>
+              <v-flex xs6 class="text-xs-right">
+                <v-btn small flat>edit</v-btn>
+              </v-flex>
+            </v-layout>
+
+            <v-divider
+              v-else-if="item.divider"
+              :key="i"
+              dark
+              class="my-3"
+            >
+            </v-divider>
+            <v-list-tile
+              v-else
+              :key="i"
+
+              @click="clickNav(item.text)"
+            >
+              <v-list-tile-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title class="grey--text">{{item.text}}</v-list-tile-title>
+              </v-list-tile-content>
+
+            </v-list-tile>
+          </div>
+        </v-list>
+
+      </v-navigation-drawer>
+
+      <v-toolbar color="amber" app fixed clipped-left>
+          <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+          <span class="title m1-3 mr-5">Vue <span class="font-weight-light">Keep</span></span>
+          <v-text-field
+              name="search"
+              label="Search"
+              id="searchbar"
+              flat
+              hide-details
+              solo-inverted
+              prepend-inner-icon="search"
+          ></v-text-field>
+          <v-spacer></v-spacer>
+      </v-toolbar>
+
+      <v-content class="grey lighten-4" fluid grid-list-md text-xs-center>
+
+        <div id="newnote">
+        <v-layout justify-center row fill-height pt-4>
+          <v-flex lg6 xs11 mb7 sm9>
+          <v-card> 
+          <v-form>
+            <v-text-field
+                v-if="seen"
+                v-model="title"
+                placeholder= "Title"
+                solo
+                full-width
+                hide-details
+                flat
+              ></v-text-field>
+
+            <v-textarea
+              placeholder="New Note"
+              v-model="text"
+              name="text"
+              solo
+              full-width
+              hide-details
+              flat
+              rows = "1"
+              @click="seen = true"
+            ></v-textarea>
+
+            <div v-if="seen" class="bar-newnote">
+                <v-btn flat small @click="send(title, text)">Enviar</v-btn>
+            </div>
+          </v-form>
+        </v-card>
+        </v-flex>
+        </v-layout>
+      </div>
+
+
+      <v-layout justify-center class="notescontent" id="notescontent"> 
+        <v-flex>
+
+          <v-container grid-list-lg justify-space-around justify-space-between align-content-start>
+            <v-layout row wrap justify-center justify-space-around justify-space-between align-content-start>
+                <v-flex xs12 lg4 sm5 v-for="(note, index) in notes" justify-space-around justify-space-between align-content-start>
+                    <v-hover>
+
+                    <v-card color="white" hover raised slot-scope="{ hover }">
+                        <v-card-title primary-title v-if="note.title.length > 0">
+                            <span><h3>{{note.title}}</h3></span>
+                        </v-card-title>  
+                        <v-card-text>
+                            <span>{{note.text}}</span>
+                        </v-card-text>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn flat icon color="transparent" small v-if="!hover && !inMenu">
+                                <v-icon>touch_app</v-icon>
+                            </v-btn>
+
+                            <div v-else>
+
+                            <v-btn flat icon color="grey" small class="btn_note_bar">
+                                    <v-icon class="btn_note_bar">touch_app</v-icon>
+                            </v-btn>
+
+                            <v-btn flat icon color="grey" small>
+                                    <v-icon>person_add</v-icon>
+                            </v-btn>
+
+                            <v-btn flat icon color="grey" small>
+                                    <v-icon>palette</v-icon>
+                            </v-btn>
+
+                            <v-btn flat icon color="grey" small>
+                                    <v-icon>image</v-icon>
+                            </v-btn>
+
+                            <v-btn flat icon color="grey" small>
+                                    <v-icon>archive</v-icon>
+                            </v-btn>
+
+                            <v-menu top >
+                                <v-btn flat icon color="grey" small slot="activator" @click="inMenu = true; isMenu = true">
+                                    <v-icon>more_vert</v-icon>
+                                </v-btn>
+
+                                <v-list>
+                                    <v-list-tile v-for="item in menu" :key="item.key" @click="opMenu(item.key, index)">
+                                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                    </v-list-tile>
+                                </v-list>
+
+                            </v-menu>
+
+                         
+                            </div>
+                        </v-card-actions>
+
+                    </v-card>
+                    </v-hover>
+
+                </v-flex>
+            </v-layout>
+          </v-container>
+
+        </v-flex>
+      </v-layout>
+    </v-content>
+    </v-app>
+  </div>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script>
+    new Vue({ 
+      el: '#app',
+      data: {
+        drawer: null,
+        items: [
+          { icon: 'lightbulb_outline', text: 'Notes' },
+          { icon: 'touch_app', text: 'Reminders' },
+          { divider: true },
+          { heading: 'Labels' },
+          { icon: 'add', text: 'Create new label' },
+          { divider: true },
+          { icon: 'archive', text: 'Archive' },
+          { icon: 'delete', text: 'Trash' },
+          { divider: true },
+          { icon: 'settings', text: 'Settings' },
+          { icon: 'chat_bubble', text: 'Trash' },
+          { icon: 'help', text: 'Help' },
+          { icon: 'phonelink', text: 'App downloads' },
+          { icon: 'keyboard', text: 'Keyboard shortcuts' }
+        ],
+
+        notes: [
+          {title: "Lorem ipsum 1", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium sit amet lacus eu consectetur. Suspendisse vitae quam vitae mi laoreet pellentesque id id diam. Sed tempus gravida quam, et varius ex aliquam et." },
+          {title: "Lorem ipsum 2", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium sit amet lacus eu consectetur"},
+          {title: "Lorem ipsum 3", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium sit amet lacus eu consectetur. Suspendisse vitae quam vitae mi laoreet pellentesque id id diam. Sed tempus gravida quam, et varius ex aliquam et. Nulla facilisi. Fusce convallis sapien eget nisl pulvinar, efficitur maximus ligula luctus. Sed mi justo, posuere congue congue sed, suscipit id est. Etiam orci purus, tristique eget viverra sit amet, imperdiet ut purus. Suspendisse sit amet turpis scelerisque, pellentesque ex quis, rhoncus ipsum. Nam sagittis bibendum libero, eu condimentum enim dignissim a. Donec eleifend, odio ultrices malesuada luctus, quam lacus feugiat odio, sed maximus ligula est vitae risus. Nunc porttitor laoreet risus eget tristique. Vestibulum porttitor ex sed purus consectetur, nec porttitor enim accumsan. Cras auctor nisi erat, ut rutrum nisl sollicitudin ut. Aenean posuere, leo et efficitur dapibus, lacus tortor mattis lacus, vel fringilla nulla dui sed justo."}
+        ],
+
+        menu: [
+            {title: "Delet note", key: 0},
+            {title: "Change labels", key: 1}
+        
+        ],
+
+        seen: false,
+        inMenu: false,
+        isMenu: false,
+        title: "",
+        text: ""
+      },
+      methods: {
+        clickNav: function(item) {
+          alert(item);
+        },
+
+        send: function(tit, txt) {
+            if(tit.length > 0 || txt.length) {
+                this.notes.unshift({title: tit, text: txt});
+                this.title = "";
+                this.text = ""
+            }
+            this.seen = false;
+        },
+
+        closeMenu: function() {
+          if(this.isMenu) {
+            this.inMenu = true;
+            this.isMenu = false;
+          } else {
+            this.inMenu = false;
+          }
+        },
+
+        opMenu: function(op, index) {
+          if(op == 0) {
+            this.notes.splice(index, 1);
+
+
+          } else if(op == 1) {
+            alert("Change Labels");
+          }
+
+          this.inMenu = false;
+          
+        }
+      }
+  })
+
+
+  </script>
+
+  <style>
+    .v-navigation-drawer__border {
+      display: none;
+    }
+    
+    .btn_note_bar:hover {
+        color: #000;
+    }
+
+
+    @media screen and (min-width: 769px) {
+        .notescontent {
+            text-align: center;
+            justify-content: center;
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+    }
+
+    @media screen and (min-device-width: 481px) and (max-device-width: 768px) { 
+        /* STYLES HERE */
+    }
+
+    @media only screen and (max-device-width: 480px) {
+        .notescontent {
+            text-align: center;
+            justify-content: center;
+        }
+    }
+
+  </style>
+
+</body>
+</html>
