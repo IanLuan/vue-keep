@@ -8,3 +8,7 @@ A Google Keep like app made with Vue JS and Vuetify.
 ## All notes are saved in lists, only for demonstration.
 
 ![alt text](https://imgur.com/ESWZXiW.png)
+
+### Menus, options... It's working with Vue power.
+
+![alt text](https://imgur.com/DMxxRnQ.png)
