@@ -1,7 +1,7 @@
-# vue-keep
-A Google Keep like app made with Vue JS and Vuetify.
+# Vue Keep
+A Google Keep like app made with VueJS and Vuetify.
 
-### A grid layout inspired by Google Keep.
+### An amazing grid layout inspired by Google Keep.
 
 ![alt text](https://imgur.com/SBKwCvn.png)
 
@@ -9,6 +9,6 @@ A Google Keep like app made with Vue JS and Vuetify.
 
 ![alt text](https://imgur.com/ESWZXiW.png)
 
-### Menus, sidebars, toolbars... It's working with Vue power.
+### Menus, sidebars, toolbars... It's working with Vue Power.
 
 ![alt text](https://imgur.com/DMxxRnQ.png)
