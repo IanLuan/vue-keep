@@ -12,3 +12,10 @@ A Google Keep like app made with VueJS and Vuetify.
 ### Menus, sidebars, toolbars... It's working with Vue Power.
 
 ![alt text](https://imgur.com/DMxxRnQ.png)
+
+### Made with
+
+<img src="https://imgur.com/XlA4aYR.jpeg" width="15%">
+<img src="https://imgur.com/WvTw6OS.jpeg" width="15%">
+<img src="https://imgur.com/680jcbd.jpeg" width="50%">
+
